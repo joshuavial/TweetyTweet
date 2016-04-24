@@ -21,7 +21,7 @@ app.listen(process.env.PORT || 3000, function () {
   console.log('listening on port 3000!');
 });
 
-function list(){
+function allTweets(){
   return knex.raw('SELECT * FROM "tweet"' )
 }
 
@@ -31,11 +31,16 @@ function addTweet (tweet, username) {
 }
 
 
-app.get('/home', function(req, res) { // grab data from database and render onto page
-  list()
+app.get('/home', function(req, res) { 
+  // grab data from database and render onto page
+  allTweets()
   .then(function(data){
    res.render("home", {name: req.body.name, tweet: data})
  })
+  .catch(function(err) {
+    console.log(err)
+    res.send('error')
+  })
 });
 
 app.post('/home', function(req, res){
